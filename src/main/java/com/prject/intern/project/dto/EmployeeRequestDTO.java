@@ -1,16 +1,10 @@
-package com.prject.intern.project.entity;
+package com.prject.intern.project.dto;
+
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity
-
-public class Employee 
-{
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+public class EmployeeRequestDTO {
 	private int employeeId;
 	private String firstName;
 	private String lastName;
@@ -21,10 +15,10 @@ public class Employee
 	private double salary;
 	
 	
-	public int getEmployeeId() {
+    public int getEmployeeId() {
 		return employeeId;
 	}
-	public void setEmployeeId(int employeeId) {
+	public void setEmployyeId(int employeeId) {
 		this.employeeId = employeeId;
 	}
 	public String getFirstName() {
@@ -43,7 +37,9 @@ public class Employee
 		return dOB;
 	}
 	public void setDOB(String dOB) {
+		System.out.println(dOB);
 		this.dOB = dOB;
+		
 	}
 	public String getEmailId() {
 		return emailId;
@@ -77,5 +73,5 @@ public class Employee
 	}
 	
 	
-}
 
+}

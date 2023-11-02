@@ -2,19 +2,20 @@
 
 import org.springframework.stereotype.Service;
 
-import com.prject.intern.project.dto.EmployeeDTO;
+import com.prject.intern.project.dto.EmployeeRequestDTO;
+import com.prject.intern.project.dto.EmployeeResponseDTO;
 
 @Service
 public interface EmployeeService
 {
-	public EmployeeDTO getEmployeeDetails(int employeeId);
+	public EmployeeResponseDTO getEmployeeDetails(int employeeId);
 	
-	public String addEmployee(EmployeeDTO empDTO);
+	public String addEmployee(EmployeeRequestDTO empDTO);
 	
-	public String updateEmployee(EmployeeDTO empDTO);
+	public String updateEmployee(EmployeeRequestDTO empDTO);
 	
 	public String deleteEmployee(int employeeId);
 	
-	public EmployeeDTO getEmployeeDetailsByName(String employeeName);
+	public EmployeeResponseDTO getEmployeeDetailsByName(String employeeName);
 	
 }

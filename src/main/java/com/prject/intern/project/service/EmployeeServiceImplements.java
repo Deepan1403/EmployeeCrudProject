@@ -4,9 +4,10 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.prject.intern.project.dto.EmployeeDTO;
+import com.prject.intern.project.dto.EmployeeRequestDTO;
+import com.prject.intern.project.dto.EmployeeResponseDTO;
 import com.prject.intern.project.entity.Employee;
+import com.prject.intern.project.exception.EmployeeIdNotFoundException;
 import com.prject.intern.project.repository.EmployeeRepository;
 
 @Service("empService")
@@ -16,51 +17,57 @@ public class EmployeeServiceImplements implements EmployeeService
 	EmployeeRepository employeeRepository;
 
 	@Override
-	public EmployeeDTO getEmployeeDetails(int employeeId) {
+	public EmployeeResponseDTO getEmployeeDetails(int employeeId)
+	{
 		
-		Optional<Employee> emp=employeeRepository.findById(employeeId);
-		Employee empEntity = emp.get();
-		EmployeeDTO empDTO = new EmployeeDTO();
+		Optional<Employee> optionalEmployee =employeeRepository.findById(employeeId);
+	    if(optionalEmployee.isPresent())
+	    {
+	    	throw new EmployeeIdNotFoundException("Employee Not Found");
+	    }
+		Employee empEntity = optionalEmployee.get();
+		EmployeeResponseDTO empDTO = new EmployeeResponseDTO();
 		empDTO.setFirstName(empEntity.getFirstName());
 		empDTO.setLastName(empEntity.getLastName());
-		empDTO.setDOB(empEntity.getDOB());
+		empDTO.setDOB(empEntity.getdOB());
 		empDTO.setEmailId(empEntity.getEmailId());
 		empDTO.setDepartment(empEntity.getDepartment());
 		empDTO.setPosition(empEntity.getPosition());
 		empDTO.setSalary(empEntity.getSalary());
-		return null;
+		return empDTO;
 	}
 
 	@Transactional
 	@Override
-	public String addEmployee(EmployeeDTO empDTO) {
+	public String addEmployee(EmployeeRequestDTO empReqDTO) 
+	{
 		Employee emp = new Employee();
-		//System.out.println(emp.getEmployeeId());
-		emp.setFirstName(empDTO.getFirstName());
-		emp.setLastName(empDTO.getLastName());
-		emp.setDOB(empDTO.getDOB());
-		emp.setEmailId(empDTO.getEmailId());
-		emp.setDepartment(empDTO.getDepartment());
-		emp.setPosition(empDTO.getPosition() );
-		emp.setSalary(empDTO.getSalary());
-		employeeRepository.save(emp);
+		emp.setFirstName(empReqDTO.getFirstName());
+		emp.setLastName(empReqDTO.getLastName());
+		emp.setDOB(empReqDTO.getdOB());
+		emp.setEmailId(empReqDTO.getEmailId());
+		emp.setDepartment(empReqDTO.getDepartment());
+		emp.setPosition(empReqDTO.getPosition() );
+		emp.setSalary(empReqDTO.getSalary());
+		emp=employeeRepository.save(emp);
 		
 	return "EMPLOYEE ADDED SUCCESSFULLY";
 	}
 
 	@Transactional
 	@Override
-	public String updateEmployee(EmployeeDTO empDTO) {
+	public String updateEmployee(EmployeeRequestDTO empReqDTO) 
+	{
 		
-		Optional<Employee> opt =employeeRepository.findById(empDTO.getEmployeeId());
+		Optional<Employee> opt =employeeRepository.findById(empReqDTO.getEmployeeId());
 		Employee emp  = opt.get();
-		emp.setFirstName(empDTO.getFirstName());
-		emp.setLastName(empDTO.getLastName());
-		emp.setDOB(empDTO.getDOB());
-		emp.setEmailId(empDTO.getEmailId());
-		emp.setDepartment(empDTO.getDepartment());
-		emp.setPosition(empDTO.getPosition());
-		emp.setSalary(empDTO.getSalary());
+		emp.setFirstName(empReqDTO.getFirstName());
+		emp.setLastName(empReqDTO.getLastName());
+		emp.setDOB(empReqDTO.getdOB());
+		emp.setEmailId(empReqDTO.getEmailId());
+		emp.setDepartment(empReqDTO.getDepartment());
+		emp.setPosition(empReqDTO.getPosition());
+		emp.setSalary(empReqDTO.getSalary());
 		employeeRepository.save(emp);
 		return "UPDATE SUCCESS";
 	}
@@ -73,13 +80,19 @@ public class EmployeeServiceImplements implements EmployeeService
 	}
 
 	@Override
-	public EmployeeDTO getEmployeeDetailsByName(String employeeName) {
+	public EmployeeResponseDTO getEmployeeDetailsByName(String employeeName) 
+	{
 		
 		Employee emp = employeeRepository.findByFirstName(employeeName);
-		EmployeeDTO empDTO = new EmployeeDTO();
+		if(emp==null)
+		{
+			throw new EmployeeIdNotFoundException("Employee Not Found");
+		}
+		
+		EmployeeResponseDTO empDTO = new EmployeeResponseDTO();
 		empDTO.setFirstName(emp.getFirstName());
 		empDTO.setLastName(emp.getLastName());
-		empDTO.setDOB(emp.getDOB());
+		empDTO.setDOB(emp.getdOB());
 		empDTO.setEmailId(emp.getEmailId());
 		empDTO.setDepartment(emp.getDepartment());
 		empDTO.setPosition(emp.getPosition());
@@ -87,5 +100,4 @@ public class EmployeeServiceImplements implements EmployeeService
 		employeeRepository.delete(emp);
 		return empDTO;
 	}
-
 }
