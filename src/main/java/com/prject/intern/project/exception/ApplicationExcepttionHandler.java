@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
 @RestControllerAdvice
-public class ApplicationExcepttionHandler {
+public class ApplicationExcepttionHandler 
+{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -23,5 +24,13 @@ public class ApplicationExcepttionHandler {
 	{
 		String s=exception.getMessage();
 		return new ResponseEntity<>(s,HttpStatus.OK);
+	}
+	
+	@ExceptionHandler
+	public ResponseEntity<String> noEmployeeDataFoundException(NoEmployeeDataFoundException exception)
+	{
+		
+		String message = exception.getMessage();
+		return new ResponseEntity<String>(message,HttpStatus.NOT_FOUND);
 	}
 }

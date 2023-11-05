@@ -1,62 +1,73 @@
 package com.prject.intern.project.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.prject.intern.project.dto.EmployeeRequestDTO;
-import com.prject.intern.project.dto.EmployeeResponseDTO;
+
+import com.prject.intern.project.dto.EmployeeRequest;
+import com.prject.intern.project.dto.EmployeeResponse;
 import com.prject.intern.project.service.EmployeeService;
 
 @RestController
 @RequestMapping("/employee")
+@CrossOrigin("*")
 public class EmployeeController 
 {
 	@Autowired
-	EmployeeService empService;
-	@CrossOrigin
-	@PostMapping("/newuser")
-	public ResponseEntity<String> addEmployee(@RequestBody EmployeeRequestDTO empDTO) 
+	EmployeeService employeeService;
+	
+	@PostMapping("adduser")
+	public ResponseEntity<EmployeeResponse> addEmployee(@RequestBody EmployeeRequest employeeRequest)
 	{
-		String emp=empService.addEmployee(empDTO);
-		return new ResponseEntity<>(emp,HttpStatus.CREATED);
-		
+		EmployeeResponse employeeResponse = employeeService.addEmployee(employeeRequest);
+		return new ResponseEntity<EmployeeResponse>(employeeResponse,HttpStatus.CREATED);
 	}
-	@CrossOrigin
-	@GetMapping("/get")
-	public ResponseEntity<EmployeeResponseDTO> getEmployeeDetails(@RequestParam int employeeId) 
+	
+	@GetMapping("getbyid")
+	public ResponseEntity<EmployeeResponse> getEmployeeById(@RequestParam int employeeId) 
 	{
-		
-		return new ResponseEntity<>(empService.getEmployeeDetails(employeeId),HttpStatus.OK);
-		
+		EmployeeResponse employeeResponse = employeeService.getEmployeeDetailsById(employeeId);
+		return new ResponseEntity<EmployeeResponse>(employeeResponse,HttpStatus.FOUND);
 	}
-	@CrossOrigin
-	@PutMapping("/update")
-	public ResponseEntity<String> updateEmployee(@RequestBody EmployeeRequestDTO empDTO) 
+	
+	@GetMapping("alldata")
+	public ResponseEntity<List<EmployeeResponse>> getAllEmployee()
 	{
-		return new ResponseEntity<>(empService.updateEmployee(empDTO),HttpStatus.OK);
-		
+		List<EmployeeResponse> listEmployeeResponse = employeeService.getAllEmployee();
+		return new ResponseEntity<List<EmployeeResponse>>(listEmployeeResponse,HttpStatus.FOUND);
 	}
-	@CrossOrigin
-	@DeleteMapping("/delete")
+	
+	@PatchMapping("update")
+	public ResponseEntity<EmployeeResponse> updateEmployee(@RequestParam int employeeId,@RequestBody EmployeeRequest employeeRequest) 
+	{
+		EmployeeResponse employeeResponse = employeeService.updateEmployee(employeeId, employeeRequest);
+		return new ResponseEntity<EmployeeResponse>(employeeResponse,HttpStatus.OK);
+	}
+	
+	
+	@DeleteMapping("delete")
 	public ResponseEntity<String> deleteEmplyee(@RequestParam int employeeId) 
 	{
-		return new ResponseEntity<>(empService.deleteEmployee(employeeId),HttpStatus.OK);
+		String message = employeeService.deleteEmployee(employeeId);
+		return new ResponseEntity<String>(message,HttpStatus.OK);
 	}
-	@CrossOrigin
-	@GetMapping("firstname")
-	public ResponseEntity<EmployeeResponseDTO> getEmployeeDetailsByName(@RequestParam String firstName) 
+	
+	@GetMapping("getbyfirstname")
+	public ResponseEntity<List<EmployeeResponse>> getEmployeeDetailsByName(@RequestParam String employeeFirstName) 
 	{
-		
-		return  new ResponseEntity<>(empService.getEmployeeDetailsByName(firstName),HttpStatus.OK);
+		List<EmployeeResponse> employeeResponse = employeeService.getEmployeeDetailsByFirstName(employeeFirstName);
+		return new ResponseEntity<List<EmployeeResponse>>(employeeResponse,HttpStatus.FOUND);
 	}
 
 }

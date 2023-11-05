@@ -1,21 +1,27 @@
  package com.prject.intern.project.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import com.prject.intern.project.dto.EmployeeRequestDTO;
-import com.prject.intern.project.dto.EmployeeResponseDTO;
+import com.prject.intern.project.dto.EmployeeRequest;
+import com.prject.intern.project.dto.EmployeeResponse;
+
 
 @Service
 public interface EmployeeService
 {
-	public EmployeeResponseDTO getEmployeeDetails(int employeeId);
 	
-	public String addEmployee(EmployeeRequestDTO empDTO);
+	public EmployeeResponse addEmployee(EmployeeRequest employeeRequest);
 	
-	public String updateEmployee(EmployeeRequestDTO empDTO);
+	public EmployeeResponse getEmployeeDetailsById(int employeeId);
+	
+	public List<EmployeeResponse> getAllEmployee();
+	
+	public EmployeeResponse updateEmployee(int employeeId,EmployeeRequest employeeRequest);
 	
 	public String deleteEmployee(int employeeId);
 	
-	public EmployeeResponseDTO getEmployeeDetailsByName(String employeeName);
+	public List<EmployeeResponse> getEmployeeDetailsByFirstName(String employeeFirstName);
 	
 }
